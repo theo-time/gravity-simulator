@@ -1,7 +1,8 @@
 
 function drawBlob(blob)
 {
-    drawTrail(blob);
+    if(drawTrails)
+        drawTrail(blob);
     if(blob.collides) 
         fill(255, 0, 0);
     else 

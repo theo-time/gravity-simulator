@@ -165,6 +165,11 @@ var Blobs = [];
 
 var newBlob;
 
-var boxLimit = false;
 
 var zoom = 1;
+
+var mousePosScaled;
+
+// Options 
+var boxLimit = false;
+var drawTrails = true;
