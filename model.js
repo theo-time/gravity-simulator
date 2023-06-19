@@ -10,6 +10,7 @@ class  Blob {
         this.fused = false;
         this.forces = [];
         this.collides = false;
+        this.history = [];
     }
 
     updatePosition = function() {
@@ -20,6 +21,10 @@ class  Blob {
         //     this.velocity.add(acceleration);
         // }
         this.position.add(this.velocity);
+        this.history.push(this.position.copy());
+        if(this.history.length > 100) {
+            this.history.splice(0, 1);
+        }
         this.forces = [];
     }
 
@@ -56,35 +61,40 @@ function computeBlobsCollisions(Blobs)
                     var direction = p5.Vector.sub(blob.position, otherBlob.position);
                     // tangent of the collision
                     var tangentVector = createVector(direction.y, -direction.x);
-                    drawArrow(blob.position, tangentVector, 'red');
-                    drawArrow(blob.position, blob.velocity, 'yellow');
-                    drawArrow(otherBlob.position, otherBlob.velocity, 'yellow');
+                    // drawArrow(blob.position, tangentVector, 'red');
+                    // drawArrow(blob.position, blob.velocity, 'yellow');
+                    // drawArrow(otherBlob.position, otherBlob.velocity, 'yellow');
                     var collisionPoint = p5.Vector.add(blob.position, otherBlob.position).div(2);
                     tangentVector.normalize();
                     // relative velocity
                     var relativeVelocity = p5.Vector.sub(blob.velocity, otherBlob.velocity);
-                    console.log("relative velocity");
-                    console.log(relativeVelocity);
-                    drawArrow(collisionPoint, relativeVelocity, 'green');
+                    // console.log("relative velocity");
+                    // console.log(relativeVelocity);
+                    // drawArrow(collisionPoint, relativeVelocity, 'green');
+
+                    // reduced mass along tangent vector
+                    var reducedMass = (blob.mass * otherBlob.mass) / (blob.mass + otherBlob.mass);
+
                     // impulse magnitude
-                    var impulseMagnitude = p5.Vector.dot(tangentVector, relativeVelocity);
+                    var coefficientOfRestitution = 0.1;
+                    var impulseMagnitude =coefficientOfRestitution * p5.Vector.dot(tangentVector, relativeVelocity);
                     // impulse
                     var velocityComponentOnTangent = direction.mult(impulseMagnitude);
                     var velocityComponentPerpendicularToTangent = p5.Vector.sub(relativeVelocity, velocityComponentOnTangent);
                     var inversevComponentPerpendicularToTangent = createVector(velocityComponentPerpendicularToTangent.x * -1, velocityComponentPerpendicularToTangent.y * -1);
                     // collision forces
-                    otherBlob.velocity =  otherBlob.velocity.add(velocityComponentPerpendicularToTangent);
-                    blob.velocity = blob.velocity.add(inversevComponentPerpendicularToTangent);
-                    drawArrow(blob.position, blob.velocity, 'blue');
-                    drawArrow(otherBlob.position, otherBlob.velocity, 'blue');
+                    otherBlob.velocity =  otherBlob.velocity.add(velocityComponentPerpendicularToTangent.div(otherBlob.mass));
+                    blob.velocity = blob.velocity.add(inversevComponentPerpendicularToTangent.div(blob.mass));
+                    // drawArrow(blob.position, blob.velocity, 'blue');
+                    // drawArrow(otherBlob.position, otherBlob.velocity, 'blue');
                     // otherBlob.forces.push(velocityComponentPerpendicularToTangent * otherBlob.mass);
                     // blob.forces.push(velocityComponentPerpendicularToTangent.mult(-1) * blob.mass);
                     blob.collides = true;
                     otherBlob.collides = true;
-                    console.log("collision");
-                    console.log(blob.velocity);
-                    console.log(otherBlob.velocity);
-                    console.log(velocityComponentPerpendicularToTangent)
+                    // console.log("collision");
+                    // console.log(blob.velocity);
+                    // console.log(otherBlob.velocity);
+                    // console.log(velocityComponentPerpendicularToTangent)
                     // while(1)
                     // {
                     //     //sleep(1000);
@@ -124,6 +134,9 @@ function computeBlobsAccelerations(Blobs)
             if(i != j) {
                 var otherBlob = Blobs[j];
                 var distance = blob.position.dist(otherBlob.position);
+                if(distance < (blob.size + otherBlob.size) / 2) {
+                    continue;
+                }
                 var direction = p5.Vector.sub(otherBlob.position, blob.position);
                 direction.normalize();
                 var strength = (blob.mass * otherBlob.mass) / (distance * distance);
@@ -133,16 +146,25 @@ function computeBlobsAccelerations(Blobs)
         }
         // blob.forces.push(gForce);
         // handle collision 
-        if(blob.position.x < 0 || blob.position.x > windowWidth) {
-            blob.velocity.x *= -1;
-        }
-        if(blob.position.y < 0 || blob.position.y > windowHeight) {
-            blob.velocity.y *= -1;
+        if(boxLimit) {
+            if(blob.position.x < 0 || blob.position.x > windowWidth) {
+                blob.velocity.x *= -1;
+            }
+            if(blob.position.y < 0 || blob.position.y > windowHeight) {
+                blob.velocity.y *= -1;
+            }
         }
         var acceleration = gForce.div(blob.mass);
+        if(acceleration.mag() > 10000)
+            console.error(acceleration)
         blob.velocity.add(acceleration);
     }
 }
 
 var Blobs = [];
 
+var newBlob;
+
+var boxLimit = false;
+
+var zoom = 1;
