@@ -1,0 +1,16 @@
+body{
+    background-color: rgb(18, 1, 37);
+    color: #ffffff;
+    font-family: 'roboto', sans-serif;
+}
+
+.navbar
+{
+    position: absolute;
+    background-color: #00000079;
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 10px;
+    text-align: center;
+}
