@@ -4,15 +4,13 @@
     <meta charset="UTF-8">
     <title>Home</title>
     <link href="style.css" rel="stylesheet" type="text/css">
+    <link href="settings.css" rel="stylesheet" type="text/css">
+    <link href="checkbox.css" rel="stylesheet" type="text/css">
 
     
 </head>
 
 <body>
-    <script src="p5.js"></script>
-    <script src="model.js"></script>
-    <script src="view.js"></script>
-    <script src="sketch.js"></script>
 
     <!-- <div class="container">
         <div class="navbar">
@@ -30,12 +28,83 @@
             <img src="menu.png" class="menu-icon">
         </div> -->
 
-    <div class="tooltip">
-        Click to add a planet
-    </div>
-    
     <div class="header">
-        <h1>Gravity Simulator</h1>
+        <a href="index.html">
+            <div class="title">Gravity Simulator</div>
+        </a>
     </div>
     
+    <div class="settings-container" id="settings">
+        <div class="tabs-container">
+            <div class="tab" id="tab-1-button">
+                <image src="images/uranus.png" class="tab-image" id="planet-tab"></image>
+            </div>
+            <div class="tab" id="tab-2-button">
+                <image src="images/paint-palette.png" class="tab-image" id="planet-tab"></image>
+            </div>
+            <div class="tab" id="tab-3-button">
+                <image src="images/particles.png" class="tab-image" id="planet-tab"></image>
+            </div>
+        </div>
+        <div class="settings" id="tab-1">
+            <!-- <div class="settings-title">Settings</div> -->
+            <div class="settings-item">
+                <div class="settings-text">Mass <span id="demo"></span></div>
+                <input type="range" min="0" max="10000" value="50" class="slider" id="massSlider">
+            </div>
+            <div class="settings-item">
+                <div class="settings-text">Size <span id="demo3"></span></div>
+                <input type="range" min="0" max="100" value="50" class="slider" id="sizeSlider">
+            </div>
+            <!-- <div>
+                Tip:
+            </div> -->
+            <div class="setting-tip"> 
+                Click and drag on the screen to create a new planet set its initial velocity.
+            </div>
+        </div>
+        <div class="settings" id="tab-2">
+            <!-- <div class="settings-title">Settings</div> -->
+            <div class="settings-item">
+                <div class="settings-text"> Show trails <span id="demo"></span></div>
+                <input type="checkbox" id="showTrails" checked>
+            </div>
+            <div class="settings-item">
+                <div class="settings-text"> Auto-clear background <span id="demo3"></span></div>
+                <input type="checkbox" id="autoClear" checked>
+            </div>
+        </div>
+        <div class="settings" id="tab-3">
+            <div class="settings-item">
+                <div class="settings-text"> Number of particles <span id="demo"></span></div>
+                <input type="range" min="0" max="10000" value="500" class="slider" id="numberOfParticles">
+            </div>
+            <div class="settings-item">
+                <div class="settings-text"> Initial speed <span id="demo3"></span></div>
+                <input type="range" min="0" max="100" value="50" class="slider" id="initialSpeed">
+            </div>
+            <div class="settings-item">
+                <div class="settings-text"> Particle size <span id="demo3"></span></div>
+                <input type="range" min="0" max="100" value="50" class="slider" id="particleSize">
+            </div>
+            <div class="settings-item">
+                <div class="settings-text"> Particle mass <span id="demo3"></span></div>
+                <input type="range" min="0" max="100" value="50" class="slider" id="particleMass">
+            </div>
+            <div class="settings-item">
+                <div class="settings-text"> Box limit <span id="demo3"></span></div>
+                <input type="checkbox" id="boxLimit" checked>
+            </div>
+            <div class="settings-button" id="launchButton">
+                LAUNCH
+            </div>
+        </div>
+    </div>
+
+    <script src="p5.js"></script>
+    <script src="model.js"></script>
+    <script src="view.js"></script>
+    <script src="events.js"></script>
+    <script src="sketch.js"></script>
+
 </html>

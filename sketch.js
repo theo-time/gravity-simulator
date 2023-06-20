@@ -1,5 +1,18 @@
 
 
+function resett() {
+    Blobs = [];
+    newBlob = new Blob(createVector(windowWidth / 2, windowHeight / 2), 10, 10, createVector(0, 0));
+    for (var i = 0; i < particleNumber; i++) {
+        var randomPosX = random(- windowWidth / 2, windowWidth / 2);
+        var randomPosY = random(- windowHeight / 2, windowHeight / 2);
+        var randomVelocity = createVector(random(-1, 1), random(-1, 1));
+        randomVelocity.normalize().mult(particleInitialSpeed);
+        Blobs[i] = new Blob(createVector(randomPosX, randomPosY), particleInitialSize, particleInitialMass, randomVelocity, i);
+    }
+    resetFlag = false;
+}
+
 function setup() {
     // viewport size
     createCanvas(windowWidth,windowHeight);
@@ -12,7 +25,7 @@ function setup() {
         var randomPosY = random(- windowHeight / 2, windowHeight / 2);
         var randomVelocityX = random(-1, 1);
         var randomVelocityY = random(-1, 1);
-        Blobs[i] = new Blob(createVector(randomPosX, randomPosY), 5, 5, createVector(randomVelocityX, randomVelocityY), i);
+        Blobs[i] = new Blob(createVector(randomPosX, randomPosY), 5, 10, createVector(randomVelocityX, randomVelocityY), i);
     }
     setFrameRate(200);
     smooth();
@@ -34,8 +47,8 @@ function removeBlob(value, index, arr) {
 }
 
 function draw() {
-
-    clear();
+    if(autoClear)
+        clear();
     var blobToRemove = [];
     push();
         translate(width / 2, height / 2);
@@ -65,7 +78,7 @@ function draw() {
 
         }
         drawBlob(newBlob);
-        if(mouseIsPressed) {
+        if(mouseIsPressed && !settingsHover) {
             var distanceToMid = createVector(mouseX - windowWidth / 2, mouseY - windowHeight / 2);
             mousePosScaled = distanceToMid.div(zoom);
             var draggedVec = createVector(mousePosScaled.x - newBlob.position.x, mousePosScaled.y - newBlob.position.y);
@@ -73,54 +86,7 @@ function draw() {
         }
     pop();
     Blobs = Blobs.filter(blob => !blob.fused)
+    if(resetFlag)
+        resett();
 }
 
-function mouseMoved() {
-    var distanceToMid = createVector(mouseX - windowWidth / 2, mouseY - windowHeight / 2);
-    mousePosScaled = distanceToMid.div(zoom);
-    // var distanceToMid = createVector(mouseX - windowWidth / 2, mouseY - windowHeight / 2);
-    // mousePosScaled = distanceToMid.div(zoom) + createVector(windowWidth / 2, windowHeight / 2).div(zoom);
-    newBlob.position = createVector(mousePosScaled.x, mousePosScaled.y);
-}
-
-// function mouseDragged() {
-//     var distanceToMid = createVector(mouseX - windowWidth / 2, mouseY - windowHeight / 2);
-//     mousePosScaled = distanceToMid.div(zoom);
-//     newBlob.velocity = createVector(mousePosScaled.x - newBlob.position.x, mousePosScaled.y - newBlob.position.y).div(30);
-//     console.error(newBlob.velocity)
-// }
-
-function mouseWheel(event) {
-    if(mouseIsPressed) {
-        newBlob.size += event.deltaY / 10;
-        newBlob.mass += event.deltaY / 10;
-    }
-    else {
-        if(event.deltaY < 0) {
-            zoom *= 1.1;
-        }
-        else {
-            zoom *= 0.9;
-        }
-    }
-}
-
-function mousePressed() {
-    var distanceToMid = createVector(mouseX - windowWidth / 2, mouseY - windowHeight / 2);
-    mousePosScaled = distanceToMid.div(zoom);
-    newBlob.position = createVector(mousePosScaled.x, mousePosScaled.y);
-}
-
-
-function  mouseReleased()
-{
-    var distanceToMid = createVector(mouseX - windowWidth / 2, mouseY - windowHeight / 2);
-    mousePosScaled = distanceToMid.div(zoom);
-    // var distanceToMid = createVector(mouseX - windowWidth / 2, mouseY - windowHeight / 2);
-    // mousePosScaled = distanceToMid.div(zoom) + createVector(windowWidth / 2, windowHeight / 2).div(zoom);
-    newBlob.velocity = createVector(mousePosScaled.x - newBlob.position.x, mousePosScaled.y - newBlob.position.y).div(30);
-    var oldBlob = newBlob;
-    Blobs.push(newBlob);
-    newBlob = new Blob(createVector(mousePosScaled.x, mousePosScaled.y), oldBlob.size, oldBlob.mass, createVector(0,0), Blobs.length);
-}
-// newBlob.velocity = createVector(mouseX, mouseY);
