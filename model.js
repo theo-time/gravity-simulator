@@ -175,8 +175,8 @@ var boxLimit = false;
 var drawTrails = true;
 var autoClear = true;
 var particleNumber = 100;
-var particleInitialSpeed = 0.1;
-var particleInitialSize = 10;
+var particleInitialSpeed = 0;
+var particleInitialSize = 5;
 var particleInitialMass = 10;
 
 // JS EVENTS

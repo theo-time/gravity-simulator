@@ -18,15 +18,24 @@ function setup() {
     createCanvas(windowWidth,windowHeight);
     newBlob = new Blob(createVector(windowWidth / 2, windowHeight / 2), 10, 10, createVector(0, 0));
     // big blob 
-    // Blobs[0] = new Blob(createVector(0, 0), 100, 10000, createVector(0, 0));
-    // Blobs[1] = new Blob(createVector(windowWidth / 2 + 200, windowHeight / 2), 100, 1000, createVector(-5, 5));
-    for (var i = 0; i < 500; i++) {
-        var randomPosX = random(- windowWidth / 2, windowWidth / 2);
-        var randomPosY = random(- windowHeight / 2, windowHeight / 2);
-        var randomVelocityX = random(-1, 1);
-        var randomVelocityY = random(-1, 1);
-        Blobs[i] = new Blob(createVector(randomPosX, randomPosY), 5, 10, createVector(randomVelocityX, randomVelocityY), i);
-    }
+    Blobs[0] = new Blob(createVector(0, 0), 100, 10000, createVector(0, 0));
+    
+    // Small blobs orbiting 
+    Blobs[1] = new Blob(createVector(0, -200), 10, 10, createVector(5, 0));
+    Blobs[2] = new Blob(createVector(0, 200), 10, 10, createVector(-5, 0));
+    Blobs[3] = new Blob(createVector(200, 0), 10, 10, createVector(0, 5));
+    Blobs[4] = new Blob(createVector(-200, 0), 10, 10, createVector(0, -5));
+    // Blobs[5] = new Blob(createVector(100, 100), 10, 10, createVector(5, 5));
+
+
+    // Blobs[0] = new Blob(createVector(windowWidth / 2 + 200, windowHeight / 2), 100, 1000, createVector(-5, 5));
+    // for (var i = 1; i < 500; i++) {
+    //     var randomPosX = random(- windowWidth / 2, windowWidth / 2);
+    //     var randomPosY = random(- windowHeight / 2, windowHeight / 2);
+    //     var randomVelocityX = random(-1, 1);
+    //     var randomVelocityY = random(-1, 1);
+    //     Blobs[i] = new Blob(createVector(randomPosX, randomPosY), 5, 10, createVector(randomVelocityX, randomVelocityY), i);
+    // }
     setFrameRate(200);
     smooth();
 }
